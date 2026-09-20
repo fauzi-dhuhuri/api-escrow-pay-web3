@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Transaction {
+  id                String   @id @db.VarChar(50)
+  buyerEmail        String   @map("buyer_email") @db.VarChar(255)
+  sellerAddress     String   @map("seller_address") @db.VarChar(42)
+  amount            Decimal  @db.Decimal(18, 8)
+  status            String   @default("PENDING") @db.VarChar(20)
+  paymentUrl        String?  @map("payment_url") @db.Text
+  blockchainTxHash  String?  @map("blockchain_tx_hash") @db.VarChar(66)
+  rawWebhookPayload Json?    @map("raw_webhook_payload")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("transactions")
+}
